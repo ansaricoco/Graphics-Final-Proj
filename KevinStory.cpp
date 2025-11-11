@@ -80,38 +80,234 @@ void drawBook() {
     glutSwapBuffers();
 }
 
+void drawCircle2(float cx, float cy, float r) {
+    int num_segments = 50;
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2f(cx, cy); // center
+    for (int i = 0; i <= num_segments; i++) {
+        float theta = 2.0f * 3.1415926f * float(i) / float(num_segments);
+        float x = r * cosf(theta);
+        float y = r * sinf(theta);
+        glVertex2f(cx + x, cy + y);
+    }
+    glEnd();
+}
+
+// ------------------------- DRAW DAD -------------------------
+void drawDad(float x, float y) {
+
+    // Hair (short, male style)
+    glColor3f(0.1f, 0.1f, 0.1f); // black hair
+    drawCircle2(x, y + 0.28f, 0.13f);
+    // Head
+    glColor3f(1.0f, 0.8f, 0.6f); // skin
+    drawCircle2(x, y + 0.25f, 0.12f);
+
+
+    // ----------------- EYES -----------------
+    float eyeOffsetX = 0.03f;  // horizontal distance from head center
+    float eyeOffsetY = 0.03f;  // vertical offset from head center
+    float eyeRadius = 0.03f;   // white eye radius
+    float pupilRadius = 0.005f; // black pupil radius
+
+    // Left eye (white)
+    glColor3f(1.0f, 1.0f, 1.0f);
+    drawCircle2(x - eyeOffsetX, y + 0.25f + eyeOffsetY, eyeRadius);
+    // Left pupil
+    glColor3f(0.0f, 0.0f, 0.0f);
+    drawCircle2(x - eyeOffsetX, y + 0.25f + eyeOffsetY, pupilRadius);
+
+    // Right eye (white)
+    glColor3f(1.0f, 1.0f, 1.0f);
+    drawCircle2(x + eyeOffsetX, y + 0.25f + eyeOffsetY, eyeRadius);
+    // Right pupil
+    glColor3f(0.0f, 0.0f, 0.0f);
+    drawCircle2(x + eyeOffsetX, y + 0.25f + eyeOffsetY, pupilRadius);
+    // ----------------------------------------
+
+    // Torso
+    glColor3f(0.2f, 0.3f, 0.8f); // shirt
+    glBegin(GL_POLYGON);
+    glVertex2f(x - 0.1f, y);
+    glVertex2f(x + 0.1f, y);
+    glVertex2f(x + 0.1f, y + 0.2f);
+    glVertex2f(x - 0.1f, y + 0.2f);
+    glEnd();
+
+    // Left Arm
+    glColor3f(1.0f, 0.8f, 0.6f); // skin
+    glBegin(GL_POLYGON);
+    glVertex2f(x - 0.12f, y + 0.18f);
+    glVertex2f(x - 0.1f, y + 0.18f);
+    glVertex2f(x - 0.1f, y + 0.05f);
+    glVertex2f(x - 0.12f, y + 0.05f);
+    glEnd();
+
+    // Right Arm
+    glBegin(GL_POLYGON);
+    glVertex2f(x + 0.1f, y + 0.18f);
+    glVertex2f(x + 0.12f, y + 0.18f);
+    glVertex2f(x + 0.12f, y + 0.05f);
+    glVertex2f(x + 0.1f, y + 0.05f);
+    glEnd();
+
+    // Legs
+    glColor3f(0.1f, 0.1f, 0.1f); // pants
+    glBegin(GL_POLYGON);
+    glVertex2f(x - 0.08f, y - 0.2f);
+    glVertex2f(x - 0.02f, y - 0.2f);
+    glVertex2f(x - 0.02f, y);
+    glVertex2f(x - 0.08f, y);
+    glEnd();
+    glBegin(GL_POLYGON);
+    glVertex2f(x + 0.02f, y - 0.2f);
+    glVertex2f(x + 0.08f, y - 0.2f);
+    glVertex2f(x + 0.08f, y);
+    glVertex2f(x + 0.02f, y);
+    glEnd();
+}
+
+// ------------------------- DRAW MOM -------------------------
+void drawMom(float x, float y) {
+
+
+    // Hair (long, female style)
+    glColor3f(0.5f, 0.2f, 0.1f); // brown hair
+    drawCircle2(x, y + 0.32f, 0.15f); // slightly bigger for long hair
+
+    glBegin(GL_TRIANGLE_FAN); // hair sides
+    glVertex2f(x, y + 0.25f);
+    for (int i = 0; i <= 50; i++) {
+        float theta = 3.1415926f * float(i) / 50.0f; // half circle down
+        float x1 = 0.15f * cosf(theta);
+        float y1 = 0.15f * sinf(theta);
+        glVertex2f(x + x1, y + 0.25f + y1);
+    }
+    glEnd();
+    // Head
+    glColor3f(1.0f, 0.8f, 0.6f); // skin
+    drawCircle2(x, y + 0.25f, 0.12f);
+
+    // ----------------- EYES -----------------
+    float eyeOffsetX = 0.03f;  // horizontal distance from head center
+    float eyeOffsetY = 0.03f;  // vertical offset from head center
+    float eyeRadius = 0.03f;   // white eye radius
+    float pupilRadius = 0.005f; // black pupil radius
+
+    // Left eye (white)
+    glColor3f(1.0f, 1.0f, 1.0f);
+    drawCircle2(x - eyeOffsetX, y + 0.25f + eyeOffsetY, eyeRadius);
+    // Left pupil
+    glColor3f(0.0f, 0.0f, 0.0f);
+    drawCircle2(x - eyeOffsetX, y + 0.25f + eyeOffsetY, pupilRadius);
+
+    // Right eye (white)
+    glColor3f(1.0f, 1.0f, 1.0f);
+    drawCircle2(x + eyeOffsetX, y + 0.25f + eyeOffsetY, eyeRadius);
+    // Right pupil
+    glColor3f(0.0f, 0.0f, 0.0f);
+    drawCircle2(x + eyeOffsetX, y + 0.25f + eyeOffsetY, pupilRadius);
+    // ----------------------------------------
+
+    // Torso
+    glColor3f(0.8f, 0.2f, 0.2f); // dress
+    glBegin(GL_POLYGON);
+    glVertex2f(x - 0.1f, y);
+    glVertex2f(x + 0.1f, y);
+    glVertex2f(x + 0.1f, y + 0.2f);
+    glVertex2f(x - 0.1f, y + 0.2f);
+    glEnd();
+
+    // Left Arm
+    glColor3f(1.0f, 0.8f, 0.6f); // skin
+    glBegin(GL_POLYGON);
+    glVertex2f(x - 0.12f, y + 0.18f);
+    glVertex2f(x - 0.1f, y + 0.18f);
+    glVertex2f(x - 0.1f, y + 0.05f);
+    glVertex2f(x - 0.12f, y + 0.05f);
+    glEnd();
+
+    // Right Arm
+    glBegin(GL_POLYGON);
+    glVertex2f(x + 0.1f, y + 0.18f);
+    glVertex2f(x + 0.12f, y + 0.18f);
+    glVertex2f(x + 0.12f, y + 0.05f);
+    glVertex2f(x + 0.1f, y + 0.05f);
+    glEnd();
+
+    // Legs
+    glColor3f(0.1f, 0.1f, 0.1f); // pants/shoes
+    glBegin(GL_POLYGON);
+    glVertex2f(x - 0.08f, y - 0.2f);
+    glVertex2f(x - 0.02f, y - 0.2f);
+    glVertex2f(x - 0.02f, y);
+    glVertex2f(x - 0.08f, y);
+    glEnd();
+    glBegin(GL_POLYGON);
+    glVertex2f(x + 0.02f, y - 0.2f);
+    glVertex2f(x + 0.08f, y - 0.2f);
+    glVertex2f(x + 0.08f, y);
+    glVertex2f(x + 0.02f, y);
+    glEnd();
+}
+
+
 // ---------------- COUCH SCENE ----------------
 void drawCouchScene() {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // Couch
-    glColor3f(0.7f, 0.2f, 0.2f);
+    //COUCH MAIN CUSHION
+    glColor3f(0.631f, 0.380f, 0.227f); //lighter brown
     glBegin(GL_POLYGON);
     glVertex2f(-0.7f, -0.2f);
     glVertex2f(0.7f, -0.2f);
     glVertex2f(0.7f, 0.2f);
     glVertex2f(-0.7f, 0.2f);
     glEnd();
-
-    // Left person head
-    glColor3f(1.0f, 0.8f, 0.6f);
-    drawCircle(-0.3f, 0.45f, 0.12f);
-    glColor3f(0.0f, 0.0f, 0.0f);
-    glBegin(GL_LINES);
-    glVertex2f(-0.3f, 0.33f); glVertex2f(-0.3f, 0.0f); // body
-    glVertex2f(-0.3f, 0.2f);  glVertex2f(-0.45f, 0.10f); // left arm
-    glVertex2f(-0.3f, 0.2f);  glVertex2f(-0.15f, 0.10f); // right arm
+    //SIDE OF COUCH left
+    glColor3f(0.439f, 0.255f, 0.141f); //darker brown
+    glBegin(GL_POLYGON);
+    glVertex2f(-0.7f, 0.2f);
+    glVertex2f(-0.9f, 0.3f);
+    glVertex2f(-0.9f, 0.1f);
+    glVertex2f(-0.9f, -0.2f);
+    glVertex2f(-0.7f, -0.2f);
+    glEnd();
+    //side of couch right
+    glColor3f(0.439f, 0.255f, 0.141f); //darker brown
+    glBegin(GL_POLYGON);
+    glVertex2f(0.7f, 0.2f);
+    glVertex2f(0.9f, 0.3f);
+    glVertex2f(0.9f, 0.1f);
+    glVertex2f(0.9f, -0.2f);
+    glVertex2f(0.7f, -0.2f);
+    glEnd();
+    //top side of couch
+    glColor3f(0.439f, 0.255f, 0.141f);
+    glBegin(GL_POLYGON);
+    glVertex2f(-0.7f, 0.2f);
+    glVertex2f(0.7f, 0.2f);
+    glVertex2f(0.7f, 0.4f);
+    glVertex2f(-0.7f, 0.4f);
     glEnd();
 
-    // Right person head
-    glColor3f(1.0f, 0.8f, 0.6f);
-    drawCircle(0.3f, 0.45f, 0.12f);
+    // parents
+    drawDad(-0.3f, 0.2f); // left side
+    drawMom(0.3f, 0.2f);  // right side
+    //emotion mouth
     glColor3f(0.0f, 0.0f, 0.0f);
-    glBegin(GL_LINES);
-    glVertex2f(0.3f, 0.33f); glVertex2f(0.3f, 0.0f); // body
-    glVertex2f(0.3f, 0.2f);  glVertex2f(0.15f, 0.10f); // left arm
-    glVertex2f(0.3f, 0.2f);  glVertex2f(0.45f, 0.10f); // right arm
+    glBegin(GL_LINE_STRIP);
+    glVertex2f(-0.29f, 0.41f);
+    glVertex2f(-0.30f, 0.42f);
+    glVertex2f(-0.31f, 0.41f);
     glEnd();
+    glBegin(GL_LINE_STRIP);
+    glVertex2f(0.29f, 0.41f);
+    glVertex2f(0.30f, 0.42f);
+    glVertex2f(0.31f, 0.41f);
+    glEnd();
+
+
 
     // Text
     glColor3f(0.1f, 0.1f, 0.1f);
@@ -119,7 +315,7 @@ void drawCouchScene() {
         drawText(-0.45f, -0.6f, "Press ENTER to find out why they are sad...");
     else {
         drawText(-0.9f, -0.6f, "Parents: Kevin, we are short on money.");
-        drawText(-0.9f, -0.7f, "We won't be able to celebrate Christmas.");
+        drawText(-0.9f, -0.7f, "We won't be able to celebrate Christmas. We're so sorry.");
         drawText(-0.4f, -0.9f, "Press ENTER to continue...");
     }
 
@@ -299,6 +495,7 @@ void drawHomeCelebration() {
     glVertex2f(0.6f, -0.2f);
     glVertex2f(0.4f, -0.2f);
     glEnd();
+
 
     // Gift box on table
     glColor3f(0.9f, 0.2f, 0.2f);
