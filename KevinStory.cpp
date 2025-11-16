@@ -1382,54 +1382,174 @@ void drawThinkingScene() {
     glutSwapBuffers();
 }
 
+void drawFriend(float x, float y, float scale = 1.0f) {
+    // hair
+    glColor3f(0.90f, 0.72f, 0.42f);
+    drawCircle(x, y + 0.28f * scale, 0.13f * scale);
+    // head
+    glColor3f(1.0f, 0.85f, 0.65f);
+    drawCircle(x, y + 0.25f * scale, 0.12f * scale);
+
+    // eyes (matching Kevin style)
+    float ex = 0.03f * scale, ey = 0.03f * scale;
+    float er = 0.03f * scale, pr = 0.005f * scale;
+    glColor3f(1, 1, 1); drawCircle(x - ex, y + 0.25f * scale + ey, er);
+    glColor3f(0, 0, 0); drawCircle(x - ex, y + 0.25f * scale + ey, pr);
+    glColor3f(1, 1, 1); drawCircle(x + ex, y + 0.25f * scale + ey, er);
+    glColor3f(0, 0, 0); drawCircle(x + ex, y + 0.25f * scale + ey, pr);
+
+    // mouth
+    glColor3f(0.6f, 0.0f, 0.0f);
+    glBegin(GL_LINE_STRIP);
+    glVertex2f(x - 0.03f * scale, y + 0.22f * scale);
+    glVertex2f(x, y + 0.20f * scale);
+    glVertex2f(x + 0.03f * scale, y + 0.22f * scale);
+    glEnd();
+
+    // torso (different color so friends stand out)
+    glColor3f(0.18f, 0.55f, 0.30f);
+    glBegin(GL_POLYGON);
+    glVertex2f(x - 0.10f * scale, y);
+    glVertex2f(x + 0.10f * scale, y);
+    glVertex2f(x + 0.10f * scale, y + 0.20f * scale);
+    glVertex2f(x - 0.10f * scale, y + 0.20f * scale);
+    glEnd();
+
+    // arms (both down)
+    glColor3f(1.0f, 0.85f, 0.65f);
+    glBegin(GL_POLYGON);
+    glVertex2f(x - 0.12f * scale, y + 0.18f * scale);
+    glVertex2f(x - 0.10f * scale, y + 0.18f * scale);
+    glVertex2f(x - 0.10f * scale, y + 0.05f * scale);
+    glVertex2f(x - 0.12f * scale, y + 0.05f * scale);
+    glEnd();
+
+    glBegin(GL_POLYGON);
+    glVertex2f(x + 0.10f * scale, y + 0.18f * scale);
+    glVertex2f(x + 0.12f * scale, y + 0.18f * scale);
+    glVertex2f(x + 0.12f * scale, y + 0.05f * scale);
+    glVertex2f(x + 0.10f * scale, y + 0.05f * scale);
+    glEnd();
+
+    // legs
+    glColor3f(0.12f, 0.12f, 0.12f);
+    glBegin(GL_POLYGON);
+    glVertex2f(x - 0.08f * scale, y - 0.10f * scale);
+    glVertex2f(x - 0.02f * scale, y - 0.10f * scale);
+    glVertex2f(x - 0.02f * scale, y);
+    glVertex2f(x - 0.08f * scale, y);
+    glEnd();
+
+    glBegin(GL_POLYGON);
+    glVertex2f(x + 0.02f * scale, y - 0.10f * scale);
+    glVertex2f(x + 0.08f * scale, y - 0.10f * scale);
+    glVertex2f(x + 0.08f * scale, y);
+    glVertex2f(x + 0.02f * scale, y);
+    glEnd();
+}
+
+
+
 // ln: Next scene (outside party invites / houses)
 void drawNextScene() {
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(viewLeft, viewRight, viewBottom, viewTop, -1.0f, 1.0f);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
+    // NIGHT: deep sky base
     glClear(GL_COLOR_BUFFER_BIT);
-    // background + stars (similar to previous)
-    glColor3f(0.02f, 0.03f, 0.12f);
-    glBegin(GL_POLYGON); glVertex2f(viewLeft, viewBottom); glVertex2f(viewRight, viewBottom); glVertex2f(viewRight, viewTop); glVertex2f(viewLeft, viewTop); glEnd();
+    glColor3f(0.02f, 0.03f, 0.12f); // near-black navy
+    glBegin(GL_POLYGON);
+    glVertex2f(viewLeft, viewBottom);
+    glVertex2f(viewRight, viewBottom);
+    glVertex2f(viewRight, viewTop);
+    glVertex2f(viewLeft, viewTop);
+    glEnd();
+
+    // draw the clock in the upper-left of the view too (keeps consistent)
+    drawDigitalClock(viewLeft + 0.06f, viewTop - 0.06f, 0.06f);
+
+    // subtle horizon glow for city silhouette
+    glColor3f(0.06f, 0.06f, 0.12f);
+    glBegin(GL_POLYGON);
+    glVertex2f(viewLeft, viewBottom);
+    glVertex2f(viewRight, viewBottom);
+    glVertex2f(viewRight, -0.6f);
+    glVertex2f(viewLeft, -0.6f);
+    glEnd();
+
+    // moon and stars
     drawMoon(-0.7f, 0.75f, 0.08f);
-    drawStar(-0.86f, 0.82f, 0.014f); drawStar(-0.78f, 0.76f, 0.010f);
-    drawStar(-0.60f, 0.84f, 0.012f); drawStar(-0.45f, 0.78f, 0.009f);
-    drawStar(-0.18f, 0.83f, 0.010f); drawStar(0.02f, 0.88f, 0.006f);
-    drawStar(0.25f, 0.80f, 0.011f); drawStar(0.55f, 0.86f, 0.013f);
+    // starfield (sparser)
+    drawStar(-0.86f, 0.82f, 0.014f);
+    drawStar(-0.78f, 0.76f, 0.010f);
+    drawStar(-0.60f, 0.84f, 0.012f);
+    drawStar(-0.45f, 0.78f, 0.009f);
+    drawStar(-0.18f, 0.83f, 0.010f);
+    drawStar(0.02f, 0.88f, 0.006f);
+    drawStar(0.25f, 0.80f, 0.011f);
+    drawStar(0.55f, 0.86f, 0.013f);
 
-    // darker ground
-    glColor3f(0.04f, 0.04f, 0.06f);
-    glBegin(GL_POLYGON); glVertex2f(viewLeft, viewBottom); glVertex2f(viewRight, viewBottom); glVertex2f(viewRight, -0.75f); glVertex2f(viewLeft, -0.75f); glEnd();
+    // fireworks: only draw when triggered by clicking the clock
+    if (fireworksActive) {
+        const float fwColors[4][3] = {
+            {1.0f, 0.4f, 0.2f},
+            {0.9f, 0.9f, 0.25f},
+            {0.4f, 0.9f, 0.95f},
+            {0.9f, 0.5f, 0.95f}
+        };
+        float fwX[5] = { -0.4f, -0.05f, 0.2f, 0.5f, 0.85f };
+        float fwY[5] = { 0.6f, 0.78f, 0.75f, 0.7f, 0.72f };
+        float fwR[5] = { 0.05f, 0.07f, 0.06f, 0.055f, 0.065f };
+        for (int i = 0; i < 5; ++i) {
+            int ci = i % 4;
+            drawFirework(fwX[i], fwY[i], fwR[i], fireworksPhase + i * 1.3f, fwColors[ci]);
+        }
 
-    // houses and friends
-    for (int i = 0;i < HOUSE_COUNT;i++) {
+        // show Happy New Year text big and centered-top
+        glColor3f(1.0f, 0.95f, 0.6f);
+        drawText(-0.30f, 0.45f, "HAPPY NEW YEAR!");
+    }
+
+    // houses -- draw darker silhouettes with lit windows
+    for (int i = 0; i < HOUSE_COUNT; ++i) {
+
         float hx = houseX[i], hy = houseY[i], hw = houseW[i], hh = houseH[i];
+
+        // generate a subtle dark color based on i
         float r = 0.12f + 0.03f * (i % 5);
         float g = 0.10f + 0.025f * ((i + 2) % 5);
         float b = 0.14f + 0.035f * ((i + 4) % 5);
+
         glColor3f(r, g, b);
         drawRect(hx, hy, hx + hw, hy + hh);
+
+        // windows stay the same
         glColor3f(1.0f, 0.84f, 0.35f);
         drawRect(hx + hw * 0.12f, hy + hh * 0.6f, hx + hw * 0.25f, hy + hh * 0.45f);
         drawRect(hx + hw * 0.62f, hy + hh * 0.5f, hx + hw * 0.75f, hy + hh * 0.35f);
     }
 
-    // friends drawn if activated
-    for (int i = 0;i < HOUSE_COUNT;i++) {
+
+    // ground / street (darker)
+    glColor3f(0.04f, 0.04f, 0.06f);
+    glBegin(GL_POLYGON);
+    glVertex2f(viewLeft, viewBottom);
+    glVertex2f(viewRight, viewBottom);
+    glVertex2f(viewRight, -0.75f);
+
+    glVertex2f(viewLeft, -0.75f);
+    glEnd();
+
+    // friends gathered and Kevin at meeting point (use existing positions)
+    for (int i = 0; i < HOUSE_COUNT; ++i) {
         if (friendActivated[i] || friendWalkingArr[i]) {
+            // give friends a small highlight to show celebration (outline)
             glColor3f(0.95f, 0.95f, 1.0f);
-            // simplified friend draw: small Kevin-like figure
-            float fx = friendPosX[i], fy = friendPosY[i];
-            drawKevin(fx, fy, 1.0f);
+            // draw friend at full Kevin size with face
+            drawFriend(friendPosX[i], friendPosY[i], 1.0f);
         }
     }
-
     // Kevin at meeting point
     drawKevin(nextKevinX, nextKevinY, 0.95f);
 
+    // small instruction
     glColor3f(0.8f, 0.8f, 0.9f);
     drawText(-0.3f, 0.0f, "Click houses to invite friends to join the celebration");
     drawText(-1.0f, -0.9f, "Click clock on top left to celebrate the new year!                               Enter to continue...");
